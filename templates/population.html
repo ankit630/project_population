@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <span class="title">
+        <h1>{% block title %} {{ country.city }} {{ country.population }}{% endblock %}</h1>
+    </span>
+    <div class="content">
+            <div class="country">
+                <p><b>#{{ country.id }}</b></p>
+                <b>
+                    <p class="name">{{ country.city }} {{ country.population }}</p>
+                </b>
+                </div>
+            </div>
+    </div>
+{% endblock %}
