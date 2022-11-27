@@ -85,3 +85,8 @@ def delete(country_id):
     db.session.delete(country)
     db.session.commit()
     return redirect(url_for('index'))
+
+@app.route('/healthy')
+def healthy():
+    conn.execute('SELECT city,population FROM Population.country;')
+    return 'ok'
