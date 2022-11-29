@@ -12,8 +12,8 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://root@localhost:3306/Population'
-engine = create_engine("mysql+pymysql://root@localhost:3306/Population")
+app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://root:root@db:3306/Population'
+engine = create_engine("mysql+pymysql://root:root@db:3306/Population")
 conn = engine.connect()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -34,12 +34,12 @@ def index():
     countrys = Country.query.all()
     return render_template('index.html', countrys=countrys)
 
-#Displaying Single User
+#Displaying Single City Information
 
 @app.route('/<int:country_id>/')
 def country(country_id):
     country = Country.query.get_or_404(country_id)
-    return render_template('country.html', country=country)
+    return render_template('population.html', country=country)
 
 # Creating a New Record
 
