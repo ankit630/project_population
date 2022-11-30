@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-demo-population-mysql
+  namespace: python-population-app
+  labels:
+    app: python-demo-population-db
+    role: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: python-demo-population-db
+    role: mysql

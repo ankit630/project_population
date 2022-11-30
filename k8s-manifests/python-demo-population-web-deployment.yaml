@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-demo-population-web
+  namespace: python-population-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python-demo-population
+      role: web
+  template:
+    metadata:
+      labels:
+        app: python-demo-population
+        role: web
+    spec:
+      securityContext:
+        runAsGroup: 1000
+        runAsUser: 1000
+      containers:
+        - name: python-demo-population-web
+          image: ankit630/population:v1
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 200m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+#          readinessProbe:
+#            initialDelaySeconds: 10
+#            httpGet:
+#              port: 5000
+#              path: /healthy
+#          livenessProbe:
+#            initialDelaySeconds: 10
+#            exec:
+#              command:
+#                - /bin/sh
+#                - -c
+#                - "pidof -x python"

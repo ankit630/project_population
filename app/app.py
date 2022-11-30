@@ -12,8 +12,8 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://root:root@db:3306/Population'
-engine = create_engine("mysql+pymysql://root:root@db:3306/Population")
+app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://root:root@python-demo-population-mysql:3306/Population'
+engine = create_engine("mysql+pymysql://root:root@python-demo-population-mysql:3306/Population")
 conn = engine.connect()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
