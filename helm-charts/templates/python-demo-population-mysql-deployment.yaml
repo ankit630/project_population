@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mysql
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-db
+    role: mysql
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-db
+      role: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-db
+        role: mysql
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-mysql
+        image: {{ .Values.db.image }}:{{ .Values.db.tag }}
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-secret-env
+                key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-sql-scripts
+          mountPath: /etc/population.sql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+      - name: mysql-sql-scripts
+        secret:
+          secretName: {{ .Release.Name }}-secret-sql

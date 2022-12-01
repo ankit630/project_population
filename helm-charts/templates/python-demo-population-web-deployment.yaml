@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-web
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.web.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      role: web
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        role: web
+    spec:
+      securityContext:
+        runAsGroup: 1000
+        runAsUser: 1000
+      containers:
+        - name: {{ .Release.Name }}-web
+          image: {{ .Values.web.image }}:{{ .Values.web.tag }}
+          ports:
+            - containerPort: 5000
+          resources:
+            {{ toYaml .Values.web.resources | nindent 12 }}

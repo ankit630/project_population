@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: python-app-ingress
+  namespace: python-population-app
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+     paths:
+     - path: /
+       pathType: ImplementationSpecific
+       backend:
+        service:
+          name: python-demo-population-web
+          port:
+            number: 80

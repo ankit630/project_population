@@ -1,0 +1,15 @@
+web:
+  replicas: 2
+  image: ankit630/population
+  tag: v1
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 200m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+
+db:
+  image: mysql
+  tag: 5.7.40
