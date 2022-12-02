@@ -12,4 +12,4 @@ web:
 
 db:
   image: mysql
-  tag: 5.7.40
+  tag: 5.7

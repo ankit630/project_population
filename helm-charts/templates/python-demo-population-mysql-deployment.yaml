@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}-mysql
   namespace: {{ .Release.Namespace }}
@@ -11,8 +11,8 @@ spec:
     matchLabels:
       app: {{ .Release.Name }}-db
       role: mysql
-  strategy:
-    type: Recreate
+  serviceName: {{ .Release.Name }}-mysql
+  replicas: 1 
   template:
     metadata:
       labels:
@@ -22,6 +22,10 @@ spec:
       containers:
       - name: {{ .Release.Name }}-mysql
         image: {{ .Values.db.image }}:{{ .Values.db.tag }}
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/bash", "-c", "bash /opt/poststart.sh" ]
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
@@ -36,6 +40,9 @@ spec:
           mountPath: /var/lib/mysql
         - name: mysql-sql-scripts
           mountPath: /etc/population.sql
+        - mountPath: /opt/poststart.sh
+          subPath: poststart.sh
+          name: mysql-bash-scripts
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
@@ -43,3 +50,7 @@ spec:
       - name: mysql-sql-scripts
         secret:
           secretName: {{ .Release.Name }}-secret-sql
+      - name: mysql-bash-scripts
+        secret:
+          secretName: {{ .Release.Name }}-config
+          defaultMode: 0755
